@@ -7,43 +7,34 @@ import 'package:shortnews/model/dashboard_model.dart';
 class DataService {
   Future<List<DashBoardModel>> fetchData() async {
     try {
+      DocumentSnapshot? _lastDocument;
       List<DashBoardModel> data = [];
       CollectionReference myCollection =
-          FirebaseFirestore.instance.collection('Trending');
+          FirebaseFirestore.instance.collection('shortnews');
 
-      QuerySnapshot snapshot = await myCollection.get();
-      QuerySnapshot response2 = await FirebaseFirestore.instance
-          .collection("shortnews")
-          .where("language", isEqualTo: "en")
-          .get();
+      QuerySnapshot snapshot = await myCollection.limit(1).get();
+      // QuerySnapshot response2 = await FirebaseFirestore.instance
+      //     .collection("shortnews")
+      //     .where("language", isEqualTo: "en")
+      //     .get();
 
-      data = snapshot.docs
+        if (snapshot.docs.isNotEmpty) {
+        _lastDocument = snapshot.docs.last;
+              data = snapshot.docs
           .map((doc) => DashBoardModel(
                 id: doc.id,
                 description: doc['description'],
-                heading: doc['heading'],
                 img: doc['img'],
                 news_id: doc['news_id'],
                 news_link: doc['news_link'],
                 title: doc['title'],
                 video: doc['video'],
-               // from: doc['from'],
               ))
           .toList();
+      
+      }
 
-      data.addAll(response2.docs
-          .map((doc) => DashBoardModel(
-                id: doc.id,
-                description: doc['description'],
-                heading: doc['heading'],
-                img: doc['img'],
-                news_id: doc['news_id'],
-                news_link: doc['news_link'],
-                title: doc['title'],
-                video: doc['video'],
-                //from: doc['from'],
-              ))
-          .toList());
+
 
       final jsonString =
           jsonEncode(data.map((model) => model.toJson()).toList());
@@ -59,17 +50,15 @@ class DataService {
   Future<List<DashBoardModel>> fetchDataType(String newsType) async {
     List<DashBoardModel> data = [];
     CollectionReference myCollection =
-        FirebaseFirestore.instance.collection('Trending');
+        FirebaseFirestore.instance.collection('shortnews');
 
-    QuerySnapshot snapshot = await myCollection.get();
-    QuerySnapshot response2 =
-        await FirebaseFirestore.instance.collection("shortnews").get();
+    QuerySnapshot snapshot =
+        await myCollection.where("newsType", isEqualTo: newsType).get();
 
     data = snapshot.docs
         .map((doc) => DashBoardModel(
               id: doc.id,
               description: doc['description'],
-              heading: doc['heading'],
               img: doc['img'],
               news_id: doc['news_id'],
               news_link: doc['news_link'],

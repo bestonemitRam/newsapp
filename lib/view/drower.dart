@@ -66,7 +66,9 @@ class MenuBarScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
                                 onTap: () {
-                                  myController.fetchParticularData("Trending");
+                                  myController.fetchParticularData(myController
+                                      .list[index]['type']
+                                      .toString());
                                   Navigator.pop(context);
                                   Navigator.push(
                                     context,

@@ -57,12 +57,15 @@ dependencies:
   fluttertoast: ^8.2.4
   firebase_remote_config: ^4.3.18
   # Notifications
-  awesome_notifications:
+ 
   firebase_messaging: ^14.7.21
   flutter_ringtone_player: ^3.2.0
   in_app_notification: ^1.1.2
   hexcolor: ^3.0.1
   google_mobile_ads: ^5.0.0
+  flutter_local_notifications: ^17.1.0
+  awesome_notifications: any
+  permission_handler: ^11.3.1
 
 
   # The following adds the Cupertino Icons font to your application.

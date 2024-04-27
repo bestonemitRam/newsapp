@@ -338,7 +338,7 @@ class _DashBoardScreenState extends State<DashBoardScreenActivity> {
                                                   Container(
                                                     width: 80.w,
                                                     child: Text(
-                                                      "${item.heading}",
+                                                      "${item.title}",
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -375,7 +375,7 @@ class _DashBoardScreenState extends State<DashBoardScreenActivity> {
                                                   Container(
                                                     width: 80.w,
                                                     child: Text(
-                                                      "${item.heading}",
+                                                      "${item.title}",
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,

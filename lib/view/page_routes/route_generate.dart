@@ -22,7 +22,8 @@ class RouteGenerator {
         default:
         widgetScreen = SplashScreen();
     }
-    return PageRouteBuilder(
+    return PageRouteBuilder( 
+      
         settings: settings,
         pageBuilder: (_, __, ___) => widgetScreen,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {

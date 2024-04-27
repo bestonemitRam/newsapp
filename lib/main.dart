@@ -23,19 +23,34 @@ import 'package:shortnews/view/page_routes/routes.dart';
 import 'package:shortnews/view/uitl/app_string.dart';
 import 'package:shortnews/view/uitl/apphelper.dart';
 import 'package:shortnews/view/uitl/navigationservice.dart';
+import 'package:shortnews/view/uitl/service/notification_controller.dart';
 
 import 'package:shortnews/view/uitl/theme/dark_theme.dart';
 import 'package:shortnews/view/uitl/theme/light_theme.dart';
 import 'package:shortnews/view_model/provider/ThemeProvider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:translator/translator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 late SharedPreferences sharedPref;
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   MobileAds.instance.initialize();
+  MobileAds.instance.initialize();
 
   await Firebase.initializeApp();
+  await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
+
+  await NotificationController.startListeningNotificationEvents();
+  var status = await Permission.ignoreBatteryOptimizations.status;
+  if (!status.isGranted) {
+    var status = await Permission.ignoreBatteryOptimizations.request();
+    if (status.isGranted) {
+      debugPrint("Good, all your permission are granted, do some stuff");
+    } else {
+      debugPrint("Do stuff according to this permission was rejected");
+    }
+  }
 
 //  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   sharedPref = await SharedPreferences.getInstance();
@@ -165,8 +180,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
       return StreamProvider<InternetConnectionStatus>(
         initialData: InternetConnectionStatus.connected,
@@ -180,8 +194,7 @@ class _MyAppState extends State<MyApp> {
           ],
           child: Consumer<DarkThemeProvider>(builder: (context, value, child) {
             return GetMaterialApp(
-                builder: (context, child) 
-                {
+                builder: (context, child) {
                   AppHelper.themelight = !value.darkTheme;
                   return MediaQuery(
                     data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

@@ -15,6 +15,7 @@ import 'package:shortnews/view_model/data_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyController extends GetxController {
+  final ScrollController scrollController = ScrollController();
   final DataService _dataService = DataService();
   var myData = <DashBoardModel>[].obs;
   var internet = false.obs;
@@ -40,10 +41,15 @@ class MyController extends GetxController {
     super.onInit();
   }
 
+
   void fetchData() async {
+
+
+
     try {
       myData.value = await _dataService.fetchData();
-    } catch (e) {}
+    } catch (e) {
+    } 
   }
 
   void fetchParticularData(String newsType) async {
@@ -57,12 +63,11 @@ class MyController extends GetxController {
   getData() async {
     bool result = await InternetConnectionChecker().hasConnection;
     internet.value = result;
-    if (result == true) 
-    {
+    if (result == true) {
       fetchData();
-    //  loadModelsFromPrefs();
+      //  loadModelsFromPrefs();
     } else {
-     // loadModelsFromPrefs();
+      // loadModelsFromPrefs();
     }
   }
 
